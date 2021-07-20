@@ -55,4 +55,4 @@ spec:
         - path: /
           backend:
             serviceName: api-service-deployer
-            servicePort: 666
+            servicePort: 80
