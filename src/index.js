@@ -9,6 +9,10 @@ app.use(cors());
 
 const masterToken = process.env.TOKEN || 'token';
 
+app.get("/", (req, res)=>{
+    res.status(200).json({ok: true})
+});
+
 app.post("/webhook", (req, res)=>{
 
     const { DeployToken } = req.headers;
