@@ -43,7 +43,7 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: '${{ secrets.DOCKER_HUB_USERNAME }}/k8s-webhook-api:latest'
+        tags: '${{ secrets.DOCKER_HUB_USERNAME }}/k8s-webhook-api:${{ github.sha }}'
 
     - name: Image digest
       run: 'echo ${{ steps.docker_build.outputs }}'
@@ -52,7 +52,7 @@ jobs:
       uses: datamonsters/replace-action@v2
       with:
         files: .devops/deployment.yaml
-        replacements: '${IMAGE_TAG}=${{ secrets.DOCKER_HUB_USERNAME }}/erp-api:${{ github.sha }}'
+        replacements: '${{ secrets.DOCKER_HUB_USERNAME }}/k8s-webhook-api:${{ (.*?) }}=${{ secrets.DOCKER_HUB_USERNAME }}/k8s-webhook-api:${{ github.sha }}'
 
     - name: Cat
       run: 'cat .devops/deployment.yaml'
