@@ -53,6 +53,7 @@ jobs:
       with:
         files: .devops/deployment.yaml
         replacements: '${CICD_IMAGE}:${CICD_EXECUTION_SEQUENCE}=${{ secrets.DOCKER_HUB_USERNAME }}/k8s-webhook-api:${{ github.sha }}'
+   
     - uses: stefanzweifel/git-auto-commit-action@v4
       with:
         commit_message: Update Release 
