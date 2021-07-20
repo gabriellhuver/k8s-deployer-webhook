@@ -52,13 +52,12 @@ jobs:
       uses: datamonsters/replace-action@v2
       with:
         files: .devops/deployment.yaml
-        replacements: '${{ secrets.DOCKER_HUB_USERNAME }}/k8s-webhook-api:${{ (.*?) }}=${{ secrets.DOCKER_HUB_USERNAME }}/k8s-webhook-api:${{ github.sha }}'
+        replacements: '${IMAGE}=${{ secrets.DOCKER_HUB_USERNAME }}/k8s-webhook-api:${{ github.sha }}'
   
-    - name: K8s Deploy
-      uses: steebchen/kubectl@master
-      env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-        KUBECTL_VERSION: "1.21"
+    - name: verify deployment
+      uses: steebchen/kubectl@v2.0.0
       with:
-        args: apply -f .devops/deployment.yaml
+        config: ${{ secrets.KUBE_CONFIG_DATA }}
+        version: v1.21.0 # specify kubectl binary version explicitly
+        command: kubectl apply -f .devops/deployment.yaml
 
