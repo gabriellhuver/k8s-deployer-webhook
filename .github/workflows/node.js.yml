@@ -48,7 +48,11 @@ jobs:
     - name: Image digest
       run: 'echo ${{ steps.docker_build.outputs }}'
 
-    - uses: stefanzweifel/git-auto-commit-action@v4
+    - name: Replace image in config
+      uses: datamonsters/replace-action@v2
       with:
-        commit_message: Update Release 
+        files: .devops/deployment.yaml
+        replacements: '${IMAGE_TAG}=${{ secrets.DOCKER_HUB_USERNAME }}/erp-api:${{ github.sha }}'
 
+    - name: Cat
+      run: 'cat .devops/deployment.yaml'
