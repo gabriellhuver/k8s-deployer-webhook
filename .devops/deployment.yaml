@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: deployer-webhook
-        image: gabriellhuver/k8s-webhook-api:latest
+        image: gabriellhuver/k8s-webhook-api:${IMAGE_TAG}
         ports:
         - containerPort: 3000
         resources:
