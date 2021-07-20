@@ -17,14 +17,6 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - name: Discord Webhook Notify
-    - uses: rjstone/discord-webhook-notify@v1.0.4
-      with:
-        webhookUrl: ${{ secrets.WEBHOOK_DISCORD }}
-        # Severity level - info, warn, or error
-        severity: "info"
-        # Embed notification message. Use context expressions and environment variables to provide information. Default provides branch and user info.
-        description: "Running build ${{ github.sha }}"
     
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
@@ -70,25 +62,27 @@ jobs:
         version: v1.21.0 # specify kubectl binary version explicitly
         command: apply -f .devops/deployment.yaml
         
-    
-        
-    - name: Discord Webhook Notify Success
-    - uses: rjstone/discord-webhook-notify@v1.0.4
+    - name: Test Success
+      uses: rjstone/discord-webhook-notify@v1
+      if: success()
       with:
-        if: ${{ success() }}
-        webhookUrl: ${{ secrets.WEBHOOK_DISCORD }}
-        # Severity level - info, warn, or error
-        severity: "info"
-        # Embed notification message. Use context expressions and environment variables to provide information. Default provides branch and user info.
-        description: "Running build ${{ github.sha }}"
-    
-    - name: Discord Webhook Notify Failure
-    - uses: rjstone/discord-webhook-notify@v1.0.4
+          severity: info
+          details: Test Succeeded!
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          
+    - name: Test Failure
+      uses: rjstone/discord-webhook-notify@v1
+      if: failure()
       with:
-        if: ${{ failure() }}
-        webhookUrl: ${{ secrets.WEBHOOK_DISCORD }}
-        # Severity level - info, warn, or error
-        severity: "error"
-        # Embed notification message. Use context expressions and environment variables to provide information. Default provides branch and user info.
-        description: "Error on Build ${{ github.sha }}"
+          severity: error
+          details: Test Failed!
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          
+    - name: Test Cancelled
+      uses: rjstone/discord-webhook-notify@v1
+      if: cancelled()
+      with:
+          severity: warn
+          details: Test Cancelled!
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
