@@ -26,6 +26,13 @@ jobs:
         cache: 'npm'
     - run: npm install
     - run: npm test
+    - name: Test Cancelled
+      uses: rjstone/discord-webhook-notify@v1
+      with:
+          severity: info
+          color: "#2188ff"
+          details: Running build!
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
     
     - name: Login to Docker Hub
       uses: docker/login-action@v1
@@ -62,27 +69,27 @@ jobs:
         version: v1.21.0 # specify kubectl binary version explicitly
         command: apply -f .devops/deployment.yaml
         
-    - name: Test Success
+    - name: Build Success
       uses: rjstone/discord-webhook-notify@v1
       if: success()
       with:
           severity: info
-          details: Test Succeeded!
+          details: Build Succeeded!
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
           
-    - name: Test Failure
+    - name: Build Failure
       uses: rjstone/discord-webhook-notify@v1
       if: failure()
       with:
           severity: error
-          details: Test Failed!
+          details: Build Failed!
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
           
-    - name: Test Cancelled
+    - name: Build Cancelled
       uses: rjstone/discord-webhook-notify@v1
       if: cancelled()
       with:
           severity: warn
-          details: Test Cancelled!
+          details: Build Cancelled!
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
