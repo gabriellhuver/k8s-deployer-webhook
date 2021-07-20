@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployer-webhook
+  labels:
+    app: deployer-webhook
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deployer-webhook
+  template:
+    metadata:
+      labels:
+        app: deployer-webhook
+    spec:
+      containers:
+      - name: deployer-webhook
+        image: gabriellhuver/deployer-webhook:3
+        ports:
+        - containerPort: 3000
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "10m"
+          limits:
+            memory: "256Mi"
+            cpu: "256m"
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: api-service-deployer
+spec:
+  selector:
+    app: deployer-webhook
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: webhook-ingress
+spec:
+  rules:
+  - host: webhook.dev.erp-dev.de
+    http:
+      paths:
+        - path: /
+          backend:
+            serviceName: api-service-deployer
+            servicePort: 666
