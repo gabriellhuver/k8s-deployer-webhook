@@ -53,10 +53,12 @@ jobs:
       with:
         files: .devops/deployment.yaml
         replacements: '${{ secrets.DOCKER_HUB_USERNAME }}/k8s-webhook-api:${{ (.*?) }}=${{ secrets.DOCKER_HUB_USERNAME }}/k8s-webhook-api:${{ github.sha }}'
-
-    - name: Cat
-      run: 'cat .devops/deployment.yaml'
-
-    - uses: stefanzweifel/git-auto-commit-action@v4
+  
+    - name: K8s Deploy
+      uses: steebchen/kubectl@master
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        KUBECTL_VERSION: "1.21"
       with:
-        commit_message: Update Release 
+        args: apply -f .devops/deployment.yaml
+
