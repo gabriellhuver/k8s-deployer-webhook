@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: deployer-webhook
-        image: gabriellhuver/deployer-webhook:3
+        image: gabriellhuver/deployer-webhook:latest
         ports:
         - containerPort: 3000
         resources:
