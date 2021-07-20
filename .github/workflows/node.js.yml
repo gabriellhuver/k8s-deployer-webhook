@@ -54,7 +54,7 @@ jobs:
         files: .devops/deployment.yaml
         replacements: '${IMAGE_TAG}=${{ secrets.DOCKER_HUB_USERNAME }}/k8s-webhook-api:${{ github.sha }}'
   
-    - name: verify deployment
+    - name: Deploy to Kubernetes
       uses: steebchen/kubectl@v2.0.0
       with:
         config: ${{ secrets.KUBE_CONFIG_DATA }}
