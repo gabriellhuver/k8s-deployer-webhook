@@ -17,11 +17,10 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    
     - name: Discord Webhook Notify
     - uses: rjstone/discord-webhook-notify@v1.0.4
       with:
-        webhookUrl: "https://discord.com/api/webhooks/866907972781080586/zqcRR15G71r2BGpFV4QXw7c_BaTcv0pryKJgEj-em6j26svDguHGdG8HRKyCJ6ykKn03"
+        webhookUrl: ${{ secrets.WEBHOOK_DISCORD }}
         # Severity level - info, warn, or error
         severity: "info"
         # Embed notification message. Use context expressions and environment variables to provide information. Default provides branch and user info.
