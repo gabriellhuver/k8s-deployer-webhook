@@ -52,7 +52,7 @@ jobs:
       uses: datamonsters/replace-action@v2
       with:
         files: .devops/deployment.yaml
-        replacements: '${IMAGE_TAG}=${{ secrets.DOCKER_HUB_USERNAME }}/k8s-webhook-api:${{ github.sha }}'
+        replacements: '${IMAGE_TAG}=${{ github.sha }}'
   
     - name: Deploy to Kubernetes
       uses: steebchen/kubectl@v2.0.0
